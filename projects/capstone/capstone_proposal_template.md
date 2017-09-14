@@ -53,7 +53,7 @@ Example images from selected datasets:
 |----------| ------------- |:-------------:| -----:|
 |SenseZ3D|![SenseZ3d rock](https://s3-us-west-2.amazonaws.com/mtcapps/mlcapstone/images/rock.png)|![SenseZ3d paper](https://s3-us-west-2.amazonaws.com/mtcapps/mlcapstone/images/paper.png)|![SenseZ3d scissors](https://s3-us-west-2.amazonaws.com/mtcapps/mlcapstone/images/scissors.png)
 |BochumGestures1998|![Bochum rock](https://s3-us-west-2.amazonaws.com/mtcapps/mlcapstone/images/carstenk01c00R.png)|![Bochum paper](https://s3-us-west-2.amazonaws.com/mtcapps/mlcapstone/images/carstenk03c00R.png)|![Bochum scissors](https://s3-us-west-2.amazonaws.com/mtcapps/mlcapstone/images/rashidm11c00R.png)|
-|Specially made| ![researcher rock](https://s3-us-west-2.amazonaws.com/mtcapps/mlcapstone/WIN_20170914_16_43_28_Pro.jpg)      | ![researcher paper](https://s3-us-west-2.amazonaws.com/mtcapps/mlcapstone/WIN_20170914_16_43_43_Pro.jpg) | ![researcher scissors](https://s3-us-west-2.amazonaws.com/mtcapps/mlcapstone/WIN_20170914_16_43_38_Pro.jpg) |
+|Specially made| ![researcher rock](https://s3-us-west-2.amazonaws.com/mtcapps/mlcapstone/images/WIN_20170914_16_43_28_Pro.jpg)      | ![researcher paper](https://s3-us-west-2.amazonaws.com/mtcapps/mlcapstone/images/WIN_20170914_16_43_43_Pro.jpg) | ![researcher scissors](https://s3-us-west-2.amazonaws.com/mtcapps/mlcapstone/images/WIN_20170914_16_43_38_Pro.jpg) |
 
 
 
