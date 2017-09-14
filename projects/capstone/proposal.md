@@ -35,7 +35,7 @@ _(approximately 1-2 paragraphs)_
 
 A general hand gesture classifier may be used as a benchmark for this project. This classifiers usually work with more than three classes, but they appear to be the closest benchmarking model to this problem found in literature.
 
-In the work done over BochumGesture1998 in [6], researchers used a very small training set (images from 3 out of 19 individuals) and a very large testing dataset. They claimed to have achieved 85.8% accuracy on images with complex background when classifiying them into 12 different hand postures. This work seems to be a little bit old, but as most of the recent work is based on range cameras, this research appears to be a good starting point for this project.
+In the work done over BochumGesture1998 in [6], researchers used a very small training set (images from 3 out of 19 individuals) and a very large testing dataset. They claimed to have achieved 85.8% accuracy on images with complex background when classifiying them into 12 different hand postures. This work seems to be a little bit old, but as most of the recent work is based on range cameras this research appears to be a good starting point for this project.
 
 ### Evaluation Metrics
 _(approx. 1-2 paragraphs)_
@@ -50,16 +50,18 @@ _(approx. 1 page)_
 The following table shows some samples from the considered datasets
 
 |Dataset| Rock        | Paper           | Scissors  |
-|----------| ------------- |:-------------:| -----:|
+|:----------:|:-------------:|:-------------:|:-----:|
 |SenseZ3D|![SenseZ3d rock](https://s3-us-west-2.amazonaws.com/mtcapps/mlcapstone/images/rock.png)|![SenseZ3d paper](https://s3-us-west-2.amazonaws.com/mtcapps/mlcapstone/images/paper.png)|![SenseZ3d scissors](https://s3-us-west-2.amazonaws.com/mtcapps/mlcapstone/images/scissors.png)
 |BochumGestures1998|![Bochum rock](https://s3-us-west-2.amazonaws.com/mtcapps/mlcapstone/images/carstenk01c00R.png)|![Bochum paper](https://s3-us-west-2.amazonaws.com/mtcapps/mlcapstone/images/carstenk03c00R.png)|![Bochum scissors](https://s3-us-west-2.amazonaws.com/mtcapps/mlcapstone/images/rashidm11c00R.png)|
 |Specially made| ![researcher rock](https://s3-us-west-2.amazonaws.com/mtcapps/mlcapstone/images/WIN_20170914_16_43_28_Pro.jpg)      | ![researcher paper](https://s3-us-west-2.amazonaws.com/mtcapps/mlcapstone/images/WIN_20170914_16_43_43_Pro.jpg) | ![researcher scissors](https://s3-us-west-2.amazonaws.com/mtcapps/mlcapstone/images/WIN_20170914_16_43_38_Pro.jpg) |
 
-As mentioned before, the SenseZ3D and BochumGestures1998 databases aren't specialized on the rock-paper-scissor problem. Some of the gestures are similar but not the same. So there's a possibility that they could impair the classification performance over the *Specially Made* dataset. Also, it will be necessary to enlarge the images of the BochumGestures1998 as ResNet50 requires images of 224x224 pixels and this process will add distortion and noise. Thus, it seems reasonable to train and test trying different combinations of sources. This combinations are:
+As mentioned before, the SenseZ3D and BochumGestures1998 databases aren't specialized on the rock-paper-scissor problem. Some of the gestures are similar but not the same. So there's a possibility that they could impair the classification performance over the *Specially Made* dataset. Also, it will be necessary to enlarge the images of the BochumGestures1998 as ResNet50 requires images of 224x224 pixels and this process will add distortion and noise. Thus, it seems reasonable to train and test with different combinations of sources. This combinations are:
 1. Train and test using only the *Specially Made* dataset (training with images from 2 subjects and testing with the third)
 2. Train with 2 subjects from *Specially Made* plus the images from SenseZ3D. Testing is made with the remaining subject of the *Specially Made* dataset
 3. Train with the dataset mentioned in 2, but adding 3 subjects from BochumGestures1998. With this approach we may obtain a test score on the same validation test used by the benchmark algorithm. Additionally, we may also have a different test score on the testing set used in 1, 2 so we will be able to compare the results with this approaches.
+4. Train with all databases but without 1 subject of *Specially Made* dataset and using those images as test
 
+At the end there will be 4 different models. It will be possible to compare just one of this models (3) directly with the benchmarking model (because we don't have access to the code and just have the results showed on their paper)
 
 
 
