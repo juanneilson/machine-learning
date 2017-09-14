@@ -33,7 +33,7 @@ The proposed solution is to obtain a classifier by applying *Transfer Learning* 
 ### Benchmark Model
 _(approximately 1-2 paragraphs)_
 
-A general hand gesture classifier may be used as a benchmark for this project. This classifiers usually works with more than three classes, but they appear to be the closest benchmarking model to this problem found in literature.
+A general hand gesture classifier may be used as a benchmark for this project. This classifiers usually work with more than three classes, but they appear to be the closest benchmarking model to this problem found in literature.
 
 In the work done over BochumGesture1998 in [6], researchers used a very small training set (images from 3 out of 19 individuals) and a very large testing dataset. They claimed to have achieved 85.8% accuracy on images with complex background when classifiying them into 12 different hand postures. This work seems to be a little bit old, but as most of the recent work is based on range cameras, this research appears to be a good starting point for this project.
 
@@ -44,6 +44,16 @@ The proposed evaluation metric is the clasiffication accuracy over the test data
 
 ### Project Design
 _(approx. 1 page)_
+
+#### Data preprocessing
+
+Example images from selected datasets:
+
+|Dataset| Rock        | Paper           | Scissors  |
+|----------| ------------- |:-------------:| -----:|
+|SenseZ3D|![SenseZ3d rock](https://s3-us-west-2.amazonaws.com/mtcapps/mlcapstone/images/rock.png)|![SenseZ3d paper](https://s3-us-west-2.amazonaws.com/mtcapps/mlcapstone/images/paper.png)|![SenseZ3d scissors](https://s3-us-west-2.amazonaws.com/mtcapps/mlcapstone/images/scissors.png)
+|BochumGestures1998|![Bochum rock](https://s3-us-west-2.amazonaws.com/mtcapps/mlcapstone/images/carstenk01c00R.png)|![Bochum paper](https://s3-us-west-2.amazonaws.com/mtcapps/mlcapstone/images/carstenk03c00R.png)|![Bochum scissors](https://s3-us-west-2.amazonaws.com/mtcapps/mlcapstone/images/rashidm11c00R.png)|
+|Specially made| ![researcher rock](https://s3-us-west-2.amazonaws.com/mtcapps/mlcapstone/WIN_20170914_16_43_28_Pro.jpg)      | ![researcher paper](https://s3-us-west-2.amazonaws.com/mtcapps/mlcapstone/WIN_20170914_16_43_43_Pro.jpg) | ![researcher scissors](https://s3-us-west-2.amazonaws.com/mtcapps/mlcapstone/WIN_20170914_16_43_38_Pro.jpg) |
 
 
 
