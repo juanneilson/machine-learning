@@ -45,9 +45,9 @@ The proposed evaluation metric is the clasiffication accuracy over the test data
 ### Project Design
 _(approx. 1 page)_
 
-#### Data preprocessing
+#### Datasets
 
-Example images from selected datasets:
+The following table shows some samples from the considered datasets
 
 |Dataset| Rock        | Paper           | Scissors  |
 |----------| ------------- |:-------------:| -----:|
@@ -55,19 +55,17 @@ Example images from selected datasets:
 |BochumGestures1998|![Bochum rock](https://s3-us-west-2.amazonaws.com/mtcapps/mlcapstone/images/carstenk01c00R.png)|![Bochum paper](https://s3-us-west-2.amazonaws.com/mtcapps/mlcapstone/images/carstenk03c00R.png)|![Bochum scissors](https://s3-us-west-2.amazonaws.com/mtcapps/mlcapstone/images/rashidm11c00R.png)|
 |Specially made| ![researcher rock](https://s3-us-west-2.amazonaws.com/mtcapps/mlcapstone/images/WIN_20170914_16_43_28_Pro.jpg)      | ![researcher paper](https://s3-us-west-2.amazonaws.com/mtcapps/mlcapstone/images/WIN_20170914_16_43_43_Pro.jpg) | ![researcher scissors](https://s3-us-west-2.amazonaws.com/mtcapps/mlcapstone/images/WIN_20170914_16_43_38_Pro.jpg) |
 
+As mentioned before, the SenseZ3D and BochumGestures1998 databases aren't specialized on the rock-paper-scissor problem. Some of the gestures are similar but not the same. So there's a possibility that they could impair the classification performance over the *Specially Made* dataset. Also, it will be necessary to enlarge the images of the BochumGestures1998 as ResNet50 requires images of 224x224 pixels and this process will add distortion and noise. Thus, it seems reasonable to train and test trying different combinations of sources. This combinations are:
+1. Train and test using only the *Specially Made* dataset (training with images from 2 subjects and testing with the third)
+2. Train with 2 subjects from *Specially Made* plus the images from SenseZ3D. Testing is made with the remaining subject of the *Specially Made* dataset
+3. Train with the dataset mentioned in 2, but adding 3 subjects from BochumGestures1998. With this approach we may obtain a test score on the same validation test used by the benchmark algorithm. Additionally, we may also have a different test score on the testing set used in 1, 2 so we will be able to compare the results with this approaches.
+
+
 
 
 In this final section, summarize a theoretical workflow for approaching a solution given the problem. Provide thorough discussion for what strategies you may consider employing, what analysis of the data might be required before being used, or which algorithms will be considered for your implementation. The workflow and discussion that you provide should align with the qualities of the previous sections. Additionally, you are encouraged to include small visualizations, pseudocode, or diagrams to aid in describing the project design, but it is not required. The discussion should clearly outline your intended workflow of the capstone project.
 
 -----------
-
-**Before submitting your proposal, ask yourself. . .**
-
-- Does the proposal you have written follow a well-organized structure similar to that of the project template?
-- Is each section (particularly **Solution Statement** and **Project Design**) written in a clear, concise and specific fashion? Are there any ambiguous terms or phrases that need clarification?
-- Would the intended audience of your project be able to understand your proposal?
-- Have you properly proofread your proposal to assure there are minimal grammatical and spelling mistakes?
-- Are all the resources used for this project correctly cited and referenced?
 
 ## References
 * [1] Ren, Zhou, et al. "Robust hand gesture recognition with kinect sensor." Proceedings of the 19th ACM international conference on Multimedia. ACM, 2011.
