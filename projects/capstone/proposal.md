@@ -37,12 +37,10 @@ A general hand gesture classifier may be used as a benchmark for this project. T
 In the work done over BochumGesture1998 in [6], researchers used a very small training set (images from 3 out of 19 individuals) and a very large testing dataset. They claimed to have achieved 85.8% accuracy on images with complex background when classifiying them into 12 different hand postures. This work seems to be a little bit old and it is not possible to get its source code. However, as most of the recent work is based on range cameras, this research appears to be a good reference and starting point for this project.
 
 ### Evaluation Metrics
-_(approx. 1-2 paragraphs)_
 
 The proposed evaluation metric is the clasiffication accuracy over the test dataset. Depending on the use of the available datasets (see *Project Design*) the main test dataset will be the *Specially Made* testing subset. This subset consists in 30 images per each 3 gestures of one subject, which is previously separated from the training samples.
 
 ### Project Design
-_(approx. 1 page)_
 
 #### Datasets
 
@@ -69,13 +67,18 @@ At the end there will be 4 different models. It will be possible to compare just
 * Images from all databases are going to be scaled to fit the input size of ResNet50. Also the preprocessing operations required for this architechture will be applied.
 * BochumGestures1998 will have to be transformed from hsi to rgb format
 
+##### Augmentation
+
+Images from datasets are going to be augmented by means of randomly:
+
+* Rotating images up to 90 degrees
+* Horizontally flipping images
+* Shifting position by 20%
+
+
 #### Training
 
-* A dropout layer will be applied before the fully connected layer to prevent overfitting
-
-
-
-In this final section, summarize a theoretical workflow for approaching a solution given the problem. Provide thorough discussion for what strategies you may consider employing, what analysis of the data might be required before being used, or which algorithms will be considered for your implementation. The workflow and discussion that you provide should align with the qualities of the previous sections. Additionally, you are encouraged to include small visualizations, pseudocode, or diagrams to aid in describing the project design, but it is not required. The discussion should clearly outline your intended workflow of the capstone project.
+* A dropout layer will be applied before the fully connected layer to prevent overfitting. The probability of this dropout layer will depend on the training behavior.
 
 -----------
 
