@@ -24,28 +24,29 @@ The proposed classifier will receive a webcam color image as input. The algorith
 * A subset from the BochumGesture1998 [6], which contains 3 images per gesture from 19 different subjects. This database just considers hand pictures of size 128x128 pixels (smallest images of all considered databases).
 * A specially made dataset with the webcam images of three subjects. This dataset will contain 30 images of each gesture for each subject
 
-Database will be divided into train/test for all sources and the training subset will be *augmented* to prevent overfitting.
+Different combinations of this datasets are going to be used for training and testing. This is extensively described on the *Project Design* section.
 
 ### Solution Statement
 
 The proposed solution is to obtain a classifier by applying *Transfer Learning* to ResNet50 convolutional neural network. The collected rock-paper-scissors training dataset is going to be used to adapt the weights of a fully connected layer that takes its inputs from ResNet50 pre-classification outputs. The resulting algorithm is going to be evaluated as a classification task where the input are the images of people showing hand gestures from rock-paper-scissors game. The accuracy measure is going to be used to evaluate performance over the three different classes of the rock-paper-scissors game.
 
 ### Benchmark Model
-_(approximately 1-2 paragraphs)_
 
-A general hand gesture classifier may be used as a benchmark for this project. This classifiers usually work with more than three classes, but they appear to be the closest benchmarking model to this problem found in literature.
+A general hand gesture classifier may be used as a benchmark for this project. This type of classifiers usually work with more than three classes, but they are the closest benchmarking models found in literature.
 
-In the work done over BochumGesture1998 in [6], researchers used a very small training set (images from 3 out of 19 individuals) and a very large testing dataset. They claimed to have achieved 85.8% accuracy on images with complex background when classifiying them into 12 different hand postures. This work seems to be a little bit old, but as most of the recent work is based on range cameras this research appears to be a good starting point for this project.
+In the work done over BochumGesture1998 in [6], researchers used a very small training set (images from 3 out of 19 individuals) and a very large testing dataset. They claimed to have achieved 85.8% accuracy on images with complex background when classifiying them into 12 different hand postures. This work seems to be a little bit old and it is not possible to get its source code. However, as most of the recent work is based on range cameras, this research appears to be a good reference and starting point for this project.
 
 ### Evaluation Metrics
 _(approx. 1-2 paragraphs)_
 
-The proposed evaluation metric is the clasiffication accuracy over the test dataset.
+The proposed evaluation metric is the clasiffication accuracy over the test dataset. Depending on the use of the available datasets (see *Project Design*) the main test dataset will be the *Specially Made* testing subset. This subset consists in 30 images per each 3 gestures of one subject, which is previously separated from the training samples.
 
 ### Project Design
 _(approx. 1 page)_
 
 #### Datasets
+
+##### Subsets
 
 The following table shows some samples from the considered datasets
 
@@ -61,7 +62,16 @@ As mentioned before, the SenseZ3D and BochumGestures1998 databases aren't specia
 3. Train with the dataset mentioned in 2, but adding 3 subjects from BochumGestures1998. With this approach we may obtain a test score on the same validation test used by the benchmark algorithm. Additionally, we may also have a different test score on the testing set used in 1, 2 so we will be able to compare the results with this approaches.
 4. Train with all databases but without 1 subject of *Specially Made* dataset and using those images as test
 
-At the end there will be 4 different models. It will be possible to compare just one of this models (3) directly with the benchmarking model (because we don't have access to the code and just have the results showed on their paper)
+At the end there will be 4 different models. It will be possible to compare just one of this models (3) directly with the benchmarking model (because we don't have access to the code and just have the results showed on their paper).
+
+##### Preprocessing
+
+* Images from all databases are going to be scaled to fit the input size of ResNet50. Also the preprocessing operations required for this architechture will be applied.
+* BochumGestures1998 will have to be transformed from hsi to rgb format
+
+#### Training
+
+* A dropout layer will be applied before the fully connected layer to prevent overfitting
 
 
 
