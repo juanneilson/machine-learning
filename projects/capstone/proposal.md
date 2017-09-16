@@ -1,7 +1,7 @@
 # Machine Learning Engineer Nanodegree
 ## Capstone Proposal
 Juan Andrés Ramírez
-September 31st, 2017
+September 15th, 2017
 
 ## Proposal
 
