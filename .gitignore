@@ -66,5 +66,7 @@ target/
 
 *.zip
 *.rar
-projects/capstone/datasets
+projects/capstone/dataset*
+projects/capstone/saved_models
 projects/capstone/dataset_aug
+*.dll
