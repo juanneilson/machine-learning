@@ -67,3 +67,4 @@ target/
 *.zip
 *.rar
 projects/capstone/datasets
+projects/capstone/dataset_aug
