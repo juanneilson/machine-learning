@@ -89,8 +89,8 @@ Several algorithms and configurations were tested. The one that threw better res
 
 Data Augmentation it is a common technique to better exploit the available dataset and also used by the authors of ResNet50. For the purposes of this project, a different configuration was applied:
 * Rotation up to 40 degrees (to consider just standard hand positions)
-* Shifting up to 10% (not to much shifting to prevent the hands to be cropped)
-* Zoom range of 0.1 (not to much zoom variation to prevent the hands to be cropped)
+* Shifting up to 10% (not too much shifting to prevent the hands to be cropped)
+* Zoom range of 0.1 (not too much zoom variation to prevent the hands to be cropped)
 * Horizontal flipping to prevent right-handed bias
 * Filling by nearest method, to hide rotation information to the algorithm
 
@@ -101,13 +101,22 @@ A general hand gesture classifier model may be used as a benchmark for this proj
 In the work done in [6], researchers used a very small training set (images from 3 out of 19 individuals) and a very large testing dataset. They claimed to have achieved 85.8% accuracy on images with complex background when classifying them into 12 different hand postures. This work seems to be a little bit old and it is not possible to get its source code. Also the dataset used in their study contains images of smaller size, which makes them not appropriate to use with the proposed model. However, as most of the recent work is based on range cameras, this research appears to be a good reference and starting point for this project.
 
 ## III. Methodology
-_(approx. 3-5 pages)_
 
 ### Data Preprocessing
-In this section, all of your preprocessing steps will need to be clearly documented, if any were necessary. From the previous section, any of the abnormalities or characteristics that you identified about the dataset will be addressed and corrected here. Questions to ask yourself when writing this section:
-- _If the algorithms chosen require preprocessing steps like feature selection or feature transformations, have they been properly documented?_
-- _Based on the **Data Exploration** section, if there were abnormalities or characteristics that needed to be addressed, have they been properly corrected?_
-- _If no preprocessing is needed, has it been made clear why?_
+
+#### Operation
+
+When in operation, to classify images, the proposed method need all images to be pre-processed by the Operation Pre-Process scheme, defined by the steps below:
+1. Rescale to 224x224
+2. Execute the preprocessing method defined in [7] and [available in Keras](https://keras.io/applications)
+3. Get features from ResNet50: Execute ResNet50 algorithm and extract the outputs of the layer that precedes the classification layer
+
+#### Training/Testing
+
+For training and testing, the following pre-processing steps were applied to Training, Evaluation and Testing datasets:
+
+1. Make augmentation. The datasets were augmented offline by a factor of 5. This means that for each image, five new images were generated applying random transformations. The transformations parameters were described in *Data Augmentation*. The resulting images were scaled to 224x224
+2. Apply Operation Pre-Process to all images
 
 ### Implementation
 In this section, the process for which metrics, algorithms, and techniques that you implemented for the given data will need to be clearly documented. It should be abundantly clear how the implementation was carried out, and discussion should be made regarding any complications that occurred during this process. Questions to ask yourself when writing this section:
