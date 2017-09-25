@@ -52,16 +52,25 @@ As mentioned before, the intended rock-paper-scissors classifier for the web sho
 
 This dataset was created to provide the algorithm the possibility to learn from a wide range of conditions. There were used three different locations when capturing each gesture subset. The next figure shows the variations in pose, background and illummination for the paper images of one subject
 ![RPS dataset paper images](https://s3-us-west-2.amazonaws.com/mtcapps/mlcapstone/images/report/special_s1_paper.png)
+
 From the images above we may observe the following:
 * Given a static hand gesture (paper), different postures/orientations generates very different images
 * There are several degrees of freedom for a hand to express a static gesture
 
+This facts are reflected on this dataset
+
 
 ### Exploratory Visualization
-In this section, you will need to provide some form of visualization that summarizes or extracts a relevant characteristic or feature about the data. The visualization should adequately support the data being used. Discuss why this visualization was chosen and how it is relevant. Questions to ask yourself when writing this section:
-- _Have you visualized a relevant characteristic or feature about the dataset or input data?_
-- _Is the visualization thoroughly analyzed and discussed?_
-- _If a plot is provided, are the axes, title, and datum clearly defined?_
+
+The main difficulties of this problem were already mentioned. These include:
+- Pose variation
+- Illumination variation
+- Background variation
+
+This variations are shown in the figure above (refer to *Specially Made Dataset*).
+
+As the proposed solution uses ResNet50 features extracted from images, it would be interesting to look how this features will enable the classifier to discriminate between classes. This could be done by projecting sample's features into PCA axes and plotting the labeled points. This kind of analisys may help us to decrease the dimensionality of the problem as we could reduce the number of features. However, the first approach to this project involves the training of a fully connected layer that is trained with the full set of ResNet50 parameters. Dimensionality reduction methods are posponed for future work.
+
 
 ### Algorithms and Techniques
 In this section, you will need to discuss the algorithms and techniques you intend to use for solving the problem. You should justify the use of each one based on the characteristics of the problem and the problem domain. Questions to ask yourself when writing this section:
