@@ -142,7 +142,7 @@ RMSProp was used to train the proposed model.The best results were obtained with
 
 Training was made considering a batch size of 400 and 200 epochs. The training curves are shown in the following figures:
 
-![training curves](https://s3-us-west-2.amazonaws.com/mtcapps/mlcapstone/images/report/training_curves.png)
+<img src="https://s3-us-west-2.amazonaws.com/mtcapps/mlcapstone/images/report/training_curves.png" alt="Training curves" style="width: 585px;"/>
 
 #### Testing
 
