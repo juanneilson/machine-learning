@@ -1,7 +1,7 @@
 # Machine Learning Engineer Nanodegree
 ## Capstone Project
 Juan Andrés Ramírez
-September 25th, 2017
+September 26th, 2017
 
 ## I. Definition
 
@@ -32,12 +32,11 @@ The proposed classifier receives a webcam color image as input. The algorithm sh
 
 The following table shows some samples from the considered datasets
 
-|Dataset| Rock        | Paper           | Scissors  |
-|:----------:|:-------------:|:-------------:|:-----:|
-|SenseZ3D|![SenseZ3d rock](https://s3-us-west-2.amazonaws.com/mtcapps/mlcapstone/images/rock.png)|![SenseZ3d paper](https://s3-us-west-2.amazonaws.com/mtcapps/mlcapstone/images/paper.png)|![SenseZ3d scissors](https://s3-us-west-2.amazonaws.com/mtcapps/mlcapstone/images/scissors.png)
-|Specially made| ![researcher rock](https://s3-us-west-2.amazonaws.com/mtcapps/mlcapstone/images/report/WIN_20170916_09_17_46_Pro.jpg) | ![researcher paper](https://s3-us-west-2.amazonaws.com/mtcapps/mlcapstone/images/report/WIN_20170916_09_18_28_Pro.jpg) | ![researcher scissors](https://s3-us-west-2.amazonaws.com/mtcapps/mlcapstone/images/report/WIN_20170916_09_18_06_Pro.jpg) |
+![dataset samples](https://s3-us-west-2.amazonaws.com/mtcapps/mlcapstone/images/report/dataset_examples_table.png)
+
 
 Thus, considering both datasets, there were:
+
 * 30 images per class, per subject
 * 990 total images
 * 330 images per class
@@ -46,14 +45,17 @@ Thus, considering both datasets, there were:
 #### SenseZ3D Dataset
 
 As mentioned before, the intended rock-paper-scissors classifier for the web should work well on a broad range of situations. However, the SenseZ3D dataset doesn't show too much variation in background, pose and illumination conditions of the images. The next figure shows this problem in the 30 images of subject 1 for gesture 1 (paper):
+
  ![sensez3d paper images](https://s3-us-west-2.amazonaws.com/mtcapps/mlcapstone/images/report/sensez3d_s1_g1.png)
 
 #### Specially Made Dataset
 
-This dataset was created to provide the algorithm the possibility to learn from a wide range of conditions. There were used three different locations when capturing each gesture subset. The next figure shows the variations in pose, background and illummination for the paper images of one subject
+This dataset was created to provide the algorithm the possibility to learn from a wide range of conditions. There were used three different locations when capturing each gesture subset. The next figure shows the variations in pose, background and illumination for the paper images of one subject
+
 ![RPS dataset paper images](https://s3-us-west-2.amazonaws.com/mtcapps/mlcapstone/images/report/special_s1_paper.png)
 
 From the images above we may observe the following:
+
 * Given a static hand gesture (paper), different postures/orientations generates very different images
 * There are several degrees of freedom for a hand to express a static gesture
 
@@ -63,9 +65,10 @@ This facts are reflected on this dataset
 ### Exploratory Visualization
 
 The main difficulties of this problem were already mentioned. These include:
-- Pose variation
-- Illumination variation
-- Background variation
+
+* Pose variation
+* Illumination variation
+* Background variation
 
 This variations are shown in the figure above (refer to *Specially Made Dataset*).
 
@@ -88,6 +91,7 @@ Several algorithms and configurations were tested. The one that threw better res
 #### Data Augmentation
 
 Data Augmentation it is a common technique to better exploit the available dataset and also used by the authors of ResNet50. For the purposes of this project, a different configuration was applied:
+
 * Rotation up to 40 degrees (to consider just standard hand positions)
 * Shifting up to 10% (not too much shifting to prevent the hands to be cropped)
 * Zoom range of 0.1 (not too much zoom variation to prevent the hands to be cropped)
@@ -96,7 +100,7 @@ Data Augmentation it is a common technique to better exploit the available datas
 
 The following figure shows the samples generated from a single image:
 
-![augmentation examples](https://s3-us-west-2.amazonaws.com/mtcapps/mlcapstone/images/report/augmented_k_5.png)
+![Augmentation examples](https://s3-us-west-2.amazonaws.com/mtcapps/mlcapstone/images/report/augmented_k_5.png)
 
 ### Benchmark
 
@@ -111,6 +115,7 @@ In the work done in [6], researchers used a very small training set (images from
 #### Operation
 
 When in operation, to classify images, the proposed method need all images to be pre-processed by the Operation Pre-Process scheme, defined by the steps below:
+
 1. Rescale to 224x224
 2. Execute the preprocessing method defined in [7] and [available in Keras](https://keras.io/applications)
 3. Get features from ResNet50: Execute ResNet50 algorithm and extract the outputs of the layer that precedes the classification layer
@@ -124,7 +129,7 @@ For training and testing, the following pre-processing steps were applied to Tra
 
 ### Implementation
 
-The final implementation was made on Keras, using TensorFlow backend. The Keras implementation of ResNet50 was used to extract the features from the images. The code with the bests results can be found at the [project's notebook](https://github.com/juanneilson/machine-learning/blob/master/projects/capstone/Cachipun.ipynb)
+The final implementation was made on Keras, using TensorFlow backend. The Keras implementation of ResNet50 was used to extract the features from the images. The code with the bests results can be found at the [project's notebook](https://github.com/juanneilson/machine-learning/blob/master/projects/capstone/Cachipun.ipynb).
 
 #### Data Partition
 
@@ -132,7 +137,7 @@ Before pre-process, data was divided into training, validation and testing subse
 
 The first experiments consisted in training using only the specially made dataset, augmented using a factor of k = 10. Thus, the dataset had a total of 630 original images, augmented to 6300. The training subset consisted of 450 (71%) original images, augmented to 4500. Test and validation subsets had 90 (14%) original images each (900 augmented). There were poor results with this data configuration. There was a quick tendency of increasing the validation error during training.  Also, the number of trainable weights (6147) was high in comparison with the number of training examples.
 
-The next experiments added the SenseZ3D dataset and changed the augmentation factor to k = 5 (*see Refinement*). This new dataset configuration had a total of 990 original images, augmented to 4950. The training subset consisted of 810 (82%) original images, augmented to 4500. Test and validation subsets had 90 (9%) original images each (900 augmented). This configuration doubled the number of original training images and improved the classifier's performance. However in this case, the number of testing and validation images is under the usual standards. It was made this way because of the lack of data available for training. The usual costs of using small testing/validation subsets are the uncertainty of the generalization measure (we can't be so certain about our measured generalization power) and the high deviation of results from the same model architecture (same training experiments with different initializations may deliver different results). Nevertheless, as new subjects were used on the validation/test subsets, generalization measure could be good enough for our purposes (note that the need of using more data is one of the main conclusions of this project).
+The next experiments added the SenseZ3D dataset and changed the augmentation factor to k = 5 (*see Refinement*). This new dataset configuration had a total of 990 original images, augmented to 4950. The training subset consisted of 810 (82%) original images, augmented to 4500. Test and validation subsets had 90 (9%) original images each (900 augmented). This configuration doubled the number of original training images and improved the classifier's performance. However in this case, the number of testing and validation images is below the usual standards. It was made this way because of the lack of data available for training. The usual costs of using small testing/validation subsets are the uncertainty of the generalization measure (we can't be so certain about our measured generalization power) and the high deviation of results from the same model architecture (same training experiments with different initializations may deliver different results). Nevertheless, as new subjects were used on the validation/test subsets, generalization measure could be good enough for our purposes (note that the need of using more data is one of the main conclusions of this project).
 
 #### Training
 
@@ -142,7 +147,7 @@ RMSProp was used to train the proposed model.The best results were obtained with
 
 Training was made considering a batch size of 400 and 200 epochs. The training curves are shown in the following figures:
 
-<img src="https://s3-us-west-2.amazonaws.com/mtcapps/mlcapstone/images/report/training_curves.png" alt="Training curves" style="width: 585px;"/>
+![training curves](https://s3-us-west-2.amazonaws.com/mtcapps/mlcapstone/images/report/training_curves.png)
 
 #### Testing
 
@@ -150,64 +155,74 @@ The resulting model was evaluated using the preprocessed and augmented test data
 
 ### Refinement
 
-why k=5
+As stated before, it was difficult to refine parameters because of the lack of data and the consequent variance of the accuracy for different initializations (~5%).
 
-In this section, you will need to discuss the process of improvement you made upon the algorithms and techniques you used in your implementation. For example, adjusting parameters for certain models to acquire improved solutions would fall under the refinement category. Your initial and final solutions should be reported, as well as any significant intermediate results as necessary. Questions to ask yourself when writing this section:
-- _Has an initial solution been found and clearly reported?_
-- _Is the process of improvement clearly documented, such as what techniques were used?_
-- _Are intermediate and final solutions clearly reported as the process is improved?_
+Several combinations of number of epochs and batch size were studied without significant conclusions.
 
+Two values of the dataset augmentation factor k were tested using the optimal model. The value of 10 revealed to be not better than k factor value of 5. As there weren't too much samples for this project, data augmentation sounded like a very good option to improve results. However, adding more than 5 augmentation images wasn't making the results any better. This can be explained by the deepness of the ResNet50. This model was trained on a huge augmented dataset and as it is shown on the literature, most of the last layers of a deep neural network works over high-level object representations. Thus it is probable that most of the features we are using to feed the proposed model are already robust to rotation and scaling transformations. The final code uses k = 5 as it proved to work well and it is also more efficient than any bigger value.
 
 ## IV. Results
-_(approx. 2-3 pages)_
 
 ### Model Evaluation and Validation
-In this section, the final model and any supporting qualities should be evaluated in detail. It should be clear how the final model was derived and why this model was chosen. In addition, some type of analysis should be used to validate the robustness of this model and its solution, such as manipulating the input data or environment to see how the model’s solution is affected (this is called sensitivity analysis). Questions to ask yourself when writing this section:
-- _Is the final model reasonable and aligning with solution expectations? Are the final parameters of the model appropriate?_
-- _Has the final model been tested with various inputs to evaluate whether the model generalizes well to unseen data?_
-- _Is the model robust enough for the problem? Do small perturbations (changes) in training data or the input space greatly affect the results?_
-- _Can results found from the model be trusted?_
+
+The selected model achieved a mean accuracy of 78.1% over the test dataset (standard deviation of 1.82).
+
+The model's accuracy was measured on several experiments, using the same conditions but different initial weights and data sorting. Results are resumed in the following table:
+
+|Test ID| Accuracy Score[%]|
+|-------|------------------|
+|1|78.2|
+|2|79.1|
+|3|80.2|
+|4|77.8|
+|5|75.3|
+
+This results show that it is possible to obtain a model that generalizes well. However, the testing dataset contains just 1 subject, so it is important to consider more subjects in the future work to be able to predict better the generalization power of the obtained model.
+
+As announced before, there is also high variance in the result just by changing initialization weights and the order of the samples input. This is another reason to believe in adding more data to the test subset to help us to be more confident about generalization.
+
+The model from test number 1 (closest to the mean) was used to generate the following non-normalized confusion matrix:
+
+![Confusion matrix](https://s3-us-west-2.amazonaws.com/mtcapps/mlcapstone/images/report/confusion_matrix.png)
+
+The confusion matrix shows that the proposed classifier performs better on Rock and Paper images than Scissors. The images of this last category are often misclassified.
+
+The results are good, far better than a random classifier. However there's still work to do in order to be able to perform on a website.
 
 ### Justification
-In this section, your model’s final solution and its results should be compared to the benchmark you established earlier in the project using some type of statistical analysis. You should also justify whether these results and the solution are significant enough to have solved the problem posed in the project. Questions to ask yourself when writing this section:
-- _Are the final results found stronger than the benchmark result reported earlier?_
-- _Have you thoroughly analyzed and discussed the final solution?_
-- _Is the final solution significant enough to have solved the problem?_
+
+The benchmarking model reported 85.8[%] in the static hand gesture classification task. This result is better than the obtained by the proposed classifier (78.1[%]). However there is plenty of evidence that the proposed architecture could do better if the dataset cardinality is increased. One of this evidences is the fact that the weights of the model are more numerous than the total quantity of training samples, so the improvement in generalization is very probable if more data is added.
+
+The proposed evaluation dataset is also more complex than the one of the benchmarking model, but the last one solved a classification problem of 12 classes. It is not possible to compare the scores directly.
+
+The obtained score doesn't reach the benchmarking threshold and neither seems to be reliable enough for using in production environment. However, it is very probable that the use of more data could change this result.
 
 
 ## V. Conclusion
-_(approx. 1-2 pages)_
 
 ### Free-Form Visualization
-In this section, you will need to provide some form of visualization that emphasizes an important quality about the project. It is much more free-form, but should reasonably support a significant result or characteristic about the problem that you want to discuss. Questions to ask yourself when writing this section:
-- _Have you visualized a relevant or important quality about the problem, dataset, input data, or results?_
-- _Is the visualization thoroughly analyzed and discussed?_
-- _If a plot is provided, are the axes, title, and datum clearly defined?_
+
+Some results over random images from the testing subject are displayed below:
+
+![Some predictions over testing subset](https://s3-us-west-2.amazonaws.com/mtcapps/mlcapstone/images/report/testing_images.jpg)
+
+The above figure shows the proposed classifier in action. There's still work to do to improve scissors classification.
 
 ### Reflection
-In this section, you will summarize the entire end-to-end problem solution and discuss one or two particular aspects of the project you found interesting or difficult. You are expected to reflect on the project as a whole to show that you have a firm understanding of the entire process employed in your work. Questions to ask yourself when writing this section:
-- _Have you thoroughly summarized the entire process you used for this project?_
-- _Were there any interesting aspects of the project?_
-- _Were there any difficult aspects of the project?_
-- _Does the final model and solution fit your expectations for the problem, and should it be used in a general setting to solve these types of problems?_
+
+An automatic classifier of rock-paper-scissor hand gesture images was created. The proposed algorithm still needs some performance improvements to reach benchmarking standards. Also needs to have better accuracy to be able to be used on a production environment. Nevertheless, there is the intuition that it could be possible to achieve better results by making a larger dataset.
+
+It is very interesting to note that to create this classifier it wasn't needed any special knowledge, like digital image processing or hand anatomy studies. Just the correct images were fed to a general purpose model and good results were obtained.
+
+It was also very interesting to note that, from certain point, adding data augmentation wasn't helping anymore. This could be due to the transformation invariance of ResNet50 features.
 
 ### Improvement
-In this section, you will need to provide discussion as to how one aspect of the implementation you designed could be improved. As an example, consider ways your implementation can be made more general, and what would need to be modified. You do not need to make this improvement, but the potential solutions resulting from these changes are considered and compared/contrasted to your current solution. Questions to ask yourself when writing this section:
-- _Are there further improvements that could be made on the algorithms or techniques you used in this project?_
-- _Were there algorithms or techniques you researched that you did not know how to implement, but would consider using if you knew how?_
-- _If you used your final solution as the new benchmark, do you think an even better solution exists?_
 
------------
+The need of more examples has been extensively remarked along this report. There are also other improvements opportunities:
 
-**Before submitting, ask yourself. . .**
-
-- Does the project report you’ve written follow a well-organized structure similar to that of the project template?
-- Is each section (particularly **Analysis** and **Methodology**) written in a clear, concise and specific fashion? Are there any ambiguous terms or phrases that need clarification?
-- Would the intended audience of your project be able to understand your analysis, methods, and results?
-- Have you properly proof-read your project report to assure there are minimal grammatical and spelling mistakes?
-- Are all the resources used for this project correctly cited and referenced?
-- Is the code that implements your solution easily readable and properly commented?
-- Does the code execute without error and produce results similar to those reported?
+* **Feature Selection**: ResNet50 was trained to detect 1000 different objects and it is probable that there are a lot of features that aren't relevant to our classification task. Thus, a method like PCA could help us to search for the most relevant features and reduce the complexity of the classifier.
+* **Fine tuning**: With more samples and a more significant test dataset, the fine tuning of this methodology could improve results. It would be important to test different values for the learning rate.
+* **Train another model**: It could be interesting to try another model from scratch. To make this, it would be necessary to have more samples to be able to train a deep network
 
 -----------
 
