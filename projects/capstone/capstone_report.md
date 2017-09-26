@@ -94,6 +94,10 @@ Data Augmentation it is a common technique to better exploit the available datas
 * Horizontal flipping to prevent right-handed bias
 * Filling by nearest method, to hide rotation information to the algorithm
 
+The following figure shows the samples generated from a single image:
+
+![augmentation examples](https://s3-us-west-2.amazonaws.com/mtcapps/mlcapstone/images/report/augmented_k_5.png)
+
 ### Benchmark
 
 A general hand gesture classifier model may be used as a benchmark for this project. This type of classifiers usually work with more than three classes, but they are the closest benchmarking models found in literature.
@@ -115,16 +119,39 @@ When in operation, to classify images, the proposed method need all images to be
 
 For training and testing, the following pre-processing steps were applied to Training, Evaluation and Testing datasets:
 
-1. Make augmentation. The datasets were augmented offline by a factor of 5. This means that for each image, five new images were generated applying random transformations. The transformations parameters were described in *Data Augmentation*. The resulting images were scaled to 224x224
-2. Apply Operation Pre-Process to all images
+1. Make augmentation. The datasets were augmented off-line by a factor of k (different values of k were used). This means that for each image, k new images were generated applying random transformations. The transformations parameters were described in *Data Augmentation*. The resulting images were scaled to 224x224
+2. Apply the Operation Pre-Process to all images
 
 ### Implementation
-In this section, the process for which metrics, algorithms, and techniques that you implemented for the given data will need to be clearly documented. It should be abundantly clear how the implementation was carried out, and discussion should be made regarding any complications that occurred during this process. Questions to ask yourself when writing this section:
-- _Is it made clear how the algorithms and techniques were implemented with the given datasets or input data?_
-- _Were there any complications with the original metrics or techniques that required changing prior to acquiring a solution?_
-- _Was there any part of the coding process (e.g., writing complicated functions) that should be documented?_
+
+The final implementation was made on Keras, using TensorFlow backend. The Keras implementation of ResNet50 was used to extract the features from the images. The code with the bests results can be found at the [project's notebook](https://github.com/juanneilson/machine-learning/blob/master/projects/capstone/Cachipun.ipynb)
+
+#### Data Partition
+
+Before pre-process, data was divided into training, validation and testing subsets. The validation subset was made with all the images taken from one of the subjects from the *Specially Made* dataset. The testing subset was created from all the images of another subject from the same dataset. This partition enabled us to measure how the classifier generalizes with new subjects.
+
+The first experiments consisted in training using only the specially made dataset, augmented using a factor of k = 10. Thus, the dataset had a total of 630 original images, augmented to 6300. The training subset consisted of 450 (71%) original images, augmented to 4500. Test and validation subsets had 90 (14%) original images each (900 augmented). There were poor results with this data configuration. There was a quick tendency of increasing the validation error during training.  Also, the number of trainable weights (6147) was high in comparison with the number of training examples.
+
+The next experiments added the SenseZ3D dataset and changed the augmentation factor to k = 5 (*see Refinement*). This new dataset configuration had a total of 990 original images, augmented to 4950. The training subset consisted of 810 (82%) original images, augmented to 4500. Test and validation subsets had 90 (9%) original images each (900 augmented). This configuration doubled the number of original training images and improved the classifier's performance. However in this case, the number of testing and validation images is under the usual standards. It was made this way because of the lack of data available for training. The usual costs of using small testing/validation subsets are the uncertainty of the generalization measure (we can't be so certain about our measured generalization power) and the high deviation of results from the same model architecture (same training experiments with different initializations may deliver different results). Nevertheless, as new subjects were used on the validation/test subsets, generalization measure could be good enough for our purposes (note that the need of using more data is one of the main conclusions of this project).
+
+#### Training
+
+The model was feed with the preprocessed images as described on previous sections.
+
+RMSProp was used to train the proposed model.The best results were obtained with the default parameters (lr=0.001, rho=0.9, epsilon=1e-08, decay=0.0). However, it was difficult to test different parameters because of the high variation of results (small test subset as explained before).
+
+Training was made considering a batch size of 400 and 200 epochs. The training curves are shown in the following figures:
+
+![training curves](https://s3-us-west-2.amazonaws.com/mtcapps/mlcapstone/images/report/training_curves.png)
+
+#### Testing
+
+The resulting model was evaluated using the preprocessed and augmented test dataset. The accuracy score was calculated and also a confusion matrix was generated to compare individual class performances.
 
 ### Refinement
+
+why k=5
+
 In this section, you will need to discuss the process of improvement you made upon the algorithms and techniques you used in your implementation. For example, adjusting parameters for certain models to acquire improved solutions would fall under the refinement category. Your initial and final solutions should be reported, as well as any significant intermediate results as necessary. Questions to ask yourself when writing this section:
 - _Has an initial solution been found and clearly reported?_
 - _Is the process of improvement clearly documented, such as what techniques were used?_
