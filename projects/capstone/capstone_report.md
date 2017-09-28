@@ -72,15 +72,29 @@ The main difficulties of this problem were already mentioned. These include:
 
 This variations are shown in the figure above (refer to *Specially Made Dataset*).
 
-As the proposed solution uses ResNet50 features extracted from images, it would be interesting to look how this features will enable the classifier to discriminate between classes. This could be done by projecting sample's features into PCA axes and plotting the labeled points. This kind of analysis may help us to decrease the dimensionality of the problem as we could reduce the number of features. However, the first approach to this project involves the training of a fully connected layer that is trained with the full set of ResNet50 parameters. Dimensionality reduction methods are postponed for future work.
+As the proposed solution uses ResNet50 features extracted from images, it would be interesting to look how this features will enable the classifier to discriminate between classes. This could be done by projecting sample's features into PCA axes and plotting the labeled points. This kind of analysis may help us to decrease the dimensionality of the problem as we could reduce the number of features. . A first approach to this analysis is to evaluate how much variance is explained by the most important components of the PCA transformation from training data. The next figure shows just this for the most important components:
 
+![Normalized principal components explained variance](https://s3-us-west-2.amazonaws.com/mtcapps/mlcapstone/images/report/explained_variance_ratio.png)
+
+The first 100 components of the 2048 total number of features sums 83% of the total variance. This shows that there is a great chance we can reduce dimensionality in a significant way. However, this doesn't say anything about how this new subset of features may help us to discriminate between classes. The reduction of features will need testing and further study and are postponed for future work.
 
 ### Algorithms and Techniques
 
 #### Classification Model
-ResNet50 is one of the better models available (considering performance on ImageNet) for the task of object recognition in images [7]. The difficulty of designing a good model from scratch (computational complexity and the requirement of a huge amount of samples) justifies the utilization of *Transfer Learning* methods.
+
+Deep convolutional neural networks have led to a series of breakthroughs for image classification [7]. Several results have been shown that this networks may outperform humans in object recognition tasks over images. This type of neural networks replace large layers of fully connected units by filtering layers that apply convolutions to their inputs. The use of several layers provides the network with great representation capacity.
+
+The difficulty of designing a good model from scratch (computational complexity and the requirement of a huge amount of samples) justifies the utilization of *Transfer Learning* methods.
+
+ResNet50, a convolutional deep neural network based on residual learning, is one of the better models available (considering performance on ImageNet) for the task of object recognition in images [7]. For this reason it was selected to be part of the proposed model. This model uses *residual layers*. This kind of layer differs from other architectures because provides input information to the output of the layer. The next figure shows the basic building block of ResNet50:
+
+![The basic building block of ResNet50](https://s3-us-west-2.amazonaws.com/mtcapps/mlcapstone/images/report/residual_learning.png)
+
+This building block is serially repeated many times. ResNet50 is much deeper than VGG architectures (VGG16 and VGG19) and the model size is actually substantially smaller due to the usage of global average pooling rather than fully-connected layers.
 
 The intended classifier is a fully connected neural network layer which receives ResNet50 features from images. The whole algorithm receives a color image of size 224x224 which must be preprocessed with the methods proposed in [7]. As an output the classifier returns a vector where each of its three components is the predicted probability for each class. The features from ResNet50 are taken after reducing dimensionality with an average pooling layer, as suggested by the authors [7].
+
+The average pooling layer takes the average result from certain dimension of a vector. Dropout layers were also tested (droput layers randomly inhibits signals on training and are commonly used to prevent overfitting) but wasn't considered in the final model.
 
 The final total number of features is 2048. As the authors use a final fully-connected neural network layer, the same it is used in this project. This layer ends on a *softmax* activation step to get probability outputs. The classification layer has 6147 weights to provide an output of three components.
 
@@ -210,7 +224,15 @@ The above figure shows the proposed classifier in action. There's still work to 
 
 ### Reflection
 
-An automatic classifier of rock-paper-scissor hand gesture images was created. The proposed algorithm still needs some performance improvements to reach benchmarking standards. Also needs to have better accuracy to be able to be used on a production environment. Nevertheless, there is the intuition that it could be possible to achieve better results by making a larger dataset.
+An automatic classifier of rock-paper-scissor hand gesture images was created. The goal was to create an algorithm able to perform in a game that allows the user to play rock-paper-scissors with just the screen and a webcam as interface.
+
+The proposed algorithm receives color images of any size, and after preprocessing the input (resizing, rescaling), it takes features from images using the ResNet50 network implementation from Keras. This features are used to feed a fully connected neural network layer which classifies the input into three different categories: Rock, Paper, Scissors.
+
+A new database was created in order to make training and testing of the classification layer. Two different subjects were used to generate the testing and validation subsets, without mixing their images with the training set. Also a dataset from a more general hand gesture study was used to increase the number of samples used for training. The dataset was also augmented to generate more images.
+
+A simple fully connected layer was trained using RMSProp algorithm. Accuracy scores were calculated from several training experiments and the confusion matrix of the selected model was generated.
+
+The proposed algorithm still needs some performance improvements to reach benchmarking standards. Also needs to have better accuracy to be able to be used on a production environment. Nevertheless, there is the intuition that it could be possible to achieve better results by making a larger dataset.
 
 It is very interesting to note that to create this classifier it wasn't needed any special knowledge, like digital image processing or hand anatomy studies. Just the correct images were fed to a general purpose model and good results were obtained.
 
