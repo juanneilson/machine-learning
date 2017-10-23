@@ -24,11 +24,13 @@ Transfer learning is a term that refers to the techniques that can be used to ta
 In this project I created an appearance-based classifier of the three rock-paper-scissors game hand gestures. The algorithm was trained by applying *Transfer learning* to a state-of-the-art object recognition CNN model. The SenseZ3D static hand gesture dataset [4, 5] combined with a new set images (specially created for this project) were used for training and evaluation.
 
 ### Problem Statement
+
 The main objective of this work is to create an image classifier capable of detecting the three different hand gestures from the rock-paper-scissors game. This classifier should allow a human user to play this game with a computer using just a screen and a webcam as an interface.
 
 The proposed solution obtains a classifier by applying *Transfer Learning* to ResNet50 [7] convolutional neural network. A new rock-paper-scissors dataset (based on SenseZ3D [3, 4] combined with new images) is created and used to adapt the weights of a fully connected layer that takes its inputs from ResNet50 pre-classification outputs. The resulting algorithm is evaluated as a classification task where the input are the images of people showing hand gestures from rock-paper-scissors game. The accuracy measure it was used to evaluate performance over the three different classes of the rock-paper-scissors game.
 
 ### Metrics
+
 The proposed evaluation metric is the classification accuracy over the test dataset. This measure is appropriate to the task because the classes have equal priority and the accuracy score shows overall classification performance.
 
 
@@ -37,20 +39,28 @@ The proposed evaluation metric is the classification accuracy over the test data
 ### Data Exploration
 
 The proposed classifier receives a webcam color image as input. The algorithm should work well on different light, postures and background conditions, so the training and testing datasets should reflect this noisy environments. For this purpose there's the need of using a lot of samples from different sources. The selected databases are:
+
 * A subset of the SenseZ3D static hand gesture dataset [4, 5], which contains 30 images of different hand gestures from each of 4 subjects in webcam similar situations. The proposed subset contains just the gestures of Rock-Paper-Scissors (G1, G2 and G5)
-* A specially made dataset with the webcam images of 7 subjects. This dataset contains 30 images of each gesture for each subject
+* A specially made dataset with the webcam images of 12 subjects. This dataset contains 30 images of each gesture for each subject
 
 The following table shows some samples from the considered datasets
 
 ![dataset samples](https://s3-us-west-2.amazonaws.com/mtcapps/mlcapstone/images/report/dataset_examples_table.png)
 
-
 Thus, considering both datasets, there were:
 
+* 16 subjects
 * 30 images per class, per subject
-* 990 total images
-* 330 images per class
-* 11 different subjects
+* 480 images per class
+* 1440 total images
+
+
+Also, a less restricted dataset was added, from pictures also specially taken for this project. This is a class-balanced dataset as the previous ones, but it isn't subject-balanced. It has pictures of hands and mostly pictures of me making rock-paper-scissors hand gestures. This dataset it's called the 'Extra Dataset' contains 86 pictures per class and a total of 258 images.
+
+Considering all datasets, our final set of images has:
+
+* 566 images per class
+* 1698 total images
 
 #### SenseZ3D Dataset
 
@@ -71,6 +81,12 @@ From the images above we may observe the following:
 
 This facts are reflected on this dataset
 
+#### Extra Dataset
+
+This dataset was created to add images to the training dataset in order to prevent overfitting and improve the training process. The next figure shows some samples of this dataset
+
+![Images from the Extra Dataset](images/extra_dataset.png)
+
 
 ### Exploratory Visualization
 
@@ -82,11 +98,19 @@ The main difficulties of this problem were already mentioned. These include:
 
 This variations are shown in the figure above (refer to *Specially Made Dataset*).
 
-As the proposed solution uses ResNet50 features extracted from images, it would be interesting to look how this features will enable the classifier to discriminate between classes. This could be done by projecting sample's features into PCA axes and plotting the labeled points. This kind of analysis may help us to decrease the dimensionality of the problem as we could reduce the number of features. . A first approach to this analysis is to evaluate how much variance is explained by the most important components of the PCA transformation from training data. The next figure shows just this for the most important components:
+As the proposed solution uses ResNet50 features extracted from images, it would be interesting to look how this features will enable the classifier to discriminate between classes. This could be done by projecting sample's features into PCA axes and plotting the labeled points. This kind of analysis may help us to decrease the dimensionality of the problem as we could reduce the number of features. A first approach to this analysis is to evaluate how much variance is explained by the most important components of the PCA transformation from training data. The next figure shows just this for the most important components:
 
 ![Normalized principal components explained variance](https://s3-us-west-2.amazonaws.com/mtcapps/mlcapstone/images/report/explained_variance_ratio.png)
 
-The first 100 components of the 2048 total number of features sums 83% of the total variance. This shows that there is a great chance we can reduce dimensionality in a significant way. However, this doesn't say anything about how this new subset of features may help us to discriminate between classes. The reduction of features will need testing and further study and are postponed for future work.
+The first 100 components of the 2048 total number of features sums 83% of the total variance. This shows that there is a great chance we can reduce dimensionality in a significant way. However, this doesn't say anything about how this new subset of features may help us to discriminate between classes.
+
+The following figure shows the classes distribution along the first 2 principal components (17% of variance explained). It is possible to see in this chart that classes are mixed in the projection. It would be very difficult for a classifier to perform well with this features, given that the distributions of the classes are overlapped between them. This conclusion just applies to the 2 main components so it just suggest that the features that maximizes variance in data doesn't help to find the patterns that describes the classes. With this analysis alone we can't tell whether a dimensionality reduction based on PCA will work. It doesn't mean either that ResNet50 features are not useful.
+
+![Training dataset projected into 2 principal components](https://s3-us-west-2.amazonaws.com/mtcapps/mlcapstone/images/report/pca_projection.png)
+
+In the training dataset the images have a lot of visual variations that aren't related with the classes. These include background variations, faces, face expressions, clothes, etc. In order to get a better projection it would be better to apply PCA analysis to a subset of images where the visual changes are strictly related with the classes. For example, using only pictures with hands over a white background.
+
+The reduction of features will need testing and further study and are postponed for future work.
 
 ### Algorithms and Techniques
 
@@ -100,9 +124,13 @@ ResNet50, a convolutional deep neural network based on residual learning, is one
 
 ![The basic building block of ResNet50](https://s3-us-west-2.amazonaws.com/mtcapps/mlcapstone/images/report/residual_learning.png)
 
-This building block is serially repeated many times. ResNet50 is much deeper than VGG architectures (VGG16 and VGG19) and the model size is actually substantially smaller due to the usage of global average pooling rather than fully-connected layers.
+In ResNet50 this building block is serially repeated 50 times, however the authors suggests that performance can be subtly improved by making deeper architectures, making deepness restricted just by computational complexity limits/requirements and overfitting.
 
-The intended classifier is a fully connected neural network layer which receives ResNet50 features from images. The whole algorithm receives a color image of size 224x224 which must be preprocessed with the methods proposed in [7]. As an output the classifier returns a vector where each of its three components is the predicted probability for each class. The features from ResNet50 are taken after reducing dimensionality with an average pooling layer, as suggested by the authors [7].
+ResNet50 is much deeper than VGG architectures (VGG16 and VGG19) and the model size is actually substantially smaller due to the usage of global average pooling rather than fully-connected layers.
+
+The intended classifier is a fully connected neural network layer which receives ResNet50 features from images. ResNet50 feature extractors allowed the whole model to outperform any other algorithm in the object classification task using just a single fully-connected layer at the end (a very simple classifier model). This was possible because of the stacked features extractors that can be found in the deepness of the architecture, which justifies the use of this features instead of other possible feature extractors like Gabor-Filters or Local Binary Patterns. However, this kind of features and others could be studied on future work
+
+The proposed algorithm receives a color image of size 224x224 which must be preprocessed with the methods proposed in [7] and then the features are extracted using ResNet50 model. As an output the classifier returns a vector where each of its three components is the predicted probability for each class. The features from ResNet50 are taken after reducing dimensionality with an average pooling layer, as suggested by the authors [7].
 
 The average pooling layer takes the average result from certain dimension of a vector. Dropout layers were also tested (droput layers randomly inhibits signals on training and are commonly used to prevent overfitting) but wasn't considered in the final model.
 
