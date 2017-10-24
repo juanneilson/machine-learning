@@ -1,0 +1,1 @@
+pandoc -s -o capstone_report.pdf capstone_report.md

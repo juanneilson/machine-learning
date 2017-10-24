@@ -43,7 +43,7 @@ The proposed classifier receives a webcam color image as input. The algorithm sh
 * A subset of the SenseZ3D static hand gesture dataset [4, 5], which contains 30 images of different hand gestures from each of 4 subjects in webcam similar situations. The proposed subset contains just the gestures of Rock-Paper-Scissors (G1, G2 and G5)
 * A specially made dataset with the webcam images of 12 subjects. This dataset contains 30 images of each gesture for each subject
 
-The following table shows some samples from the considered datasets
+The following table shows some samples from this datasets
 
 ![dataset samples](https://s3-us-west-2.amazonaws.com/mtcapps/mlcapstone/images/report/dataset_examples_table.png)
 
@@ -66,7 +66,7 @@ Considering all datasets, our final set of images has:
 
 As mentioned before, the intended rock-paper-scissors classifier for the web should work well on a broad range of situations. However, the SenseZ3D dataset doesn't show too much variation in background, pose and illumination conditions of the images. The next figure shows this problem in the 30 images of subject 1 for gesture 1 (paper):
 
- ![sensez3d paper images](https://s3-us-west-2.amazonaws.com/mtcapps/mlcapstone/images/report/sensez3d_s1_g1.png)
+![sensez3d paper images](https://s3-us-west-2.amazonaws.com/mtcapps/mlcapstone/images/report/sensez3d_s1_g1.png)
 
 #### Specially Made Dataset
 
@@ -96,17 +96,17 @@ The main difficulties of this problem were already mentioned. These include:
 * Illumination variation
 * Background variation
 
-This variations are shown in the figure above (refer to *Specially Made Dataset*).
+This variations are shown in a figure above (refer to *Specially Made Dataset*).
 
 As the proposed solution uses ResNet50 features extracted from images, it would be interesting to look how this features will enable the classifier to discriminate between classes. This could be done by projecting sample's features into PCA axes and plotting the labeled points. This kind of analysis may help us to decrease the dimensionality of the problem as we could reduce the number of features. A first approach to this analysis is to evaluate how much variance is explained by the most important components of the PCA transformation from training data. The next figure shows just this for the most important components:
 
-![Normalized principal components explained variance](https://s3-us-west-2.amazonaws.com/mtcapps/mlcapstone/images/report/explained_variance_ratio.png)
+![Normalized principal components explained variance](images/explained_variance_ratio.png)
 
 The first 100 components of the 2048 total number of features sums 83% of the total variance. This shows that there is a great chance we can reduce dimensionality in a significant way. However, this doesn't say anything about how this new subset of features may help us to discriminate between classes.
 
 The following figure shows the classes distribution along the first 2 principal components (17% of variance explained). It is possible to see in this chart that classes are mixed in the projection. It would be very difficult for a classifier to perform well with this features, given that the distributions of the classes are overlapped between them. This conclusion just applies to the 2 main components so it just suggest that the features that maximizes variance in data doesn't help to find the patterns that describes the classes. With this analysis alone we can't tell whether a dimensionality reduction based on PCA will work. It doesn't mean either that ResNet50 features are not useful.
 
-![Training dataset projected into 2 principal components](https://s3-us-west-2.amazonaws.com/mtcapps/mlcapstone/images/report/pca_projection.png)
+![Training dataset projected into 2 principal components](images/pca_projection.png)
 
 In the training dataset the images have a lot of visual variations that aren't related with the classes. These include background variations, faces, face expressions, clothes, etc. In order to get a better projection it would be better to apply PCA analysis to a subset of images where the visual changes are strictly related with the classes. For example, using only pictures with hands over a white background.
 
@@ -122,13 +122,13 @@ The difficulty of designing a good model from scratch (computational complexity 
 
 ResNet50, a convolutional deep neural network based on residual learning, is one of the better models available (considering performance on ImageNet) for the task of object recognition in images [7]. For this reason it was selected to be part of the proposed model. This model uses *residual layers*. This kind of layer differs from other architectures because provides input information to the output of the layer. The next figure shows the basic building block of ResNet50:
 
-![The basic building block of ResNet50](https://s3-us-west-2.amazonaws.com/mtcapps/mlcapstone/images/report/residual_learning.png)
+![The basic building block of ResNet50](images/residual_learning.png)
 
 In ResNet50 this building block is serially repeated 50 times, however the authors suggests that performance can be subtly improved by making deeper architectures, making deepness restricted just by computational complexity limits/requirements and overfitting.
 
 ResNet50 is much deeper than VGG architectures (VGG16 and VGG19) and the model size is actually substantially smaller due to the usage of global average pooling rather than fully-connected layers.
 
-The intended classifier is a fully connected neural network layer which receives ResNet50 features from images. ResNet50 feature extractors allowed the whole model to outperform any other algorithm in the object classification task using just a single fully-connected layer at the end (a very simple classifier model). This was possible because of the stacked features extractors that can be found in the deepness of the architecture, which justifies the use of this features instead of other possible feature extractors like Gabor-Filters or Local Binary Patterns. However, this kind of features and others could be studied on future work
+The intended classifier is a fully connected neural network layer which receives ResNet50 features from images. This feature extractors proved to be very useful and to outperformed any other algorithm in the object classification task using just a single fully-connected layer at the end (a very simple classifier model) as reported by the authors. This was possible because of the stacked features extractors that can be found in the deepness of the architecture, which justifies the use of this features instead of other possible feature extractors like Gabor-Filters or Local Binary Patterns. However, this kind of features and others could be studied on future work.
 
 The proposed algorithm receives a color image of size 224x224 which must be preprocessed with the methods proposed in [7] and then the features are extracted using ResNet50 model. As an output the classifier returns a vector where each of its three components is the predicted probability for each class. The features from ResNet50 are taken after reducing dimensionality with an average pooling layer, as suggested by the authors [7].
 
@@ -142,7 +142,7 @@ Several algorithms and configurations were tested. The one that threw better res
 
 #### Data Augmentation
 
-Data Augmentation it is a common technique to better exploit the available dataset and also used by the authors of ResNet50. For the purposes of this project, a different configuration was applied:
+Data Augmentation is a common technique to better exploit the available dataset and also used by the authors of ResNet50. For the purposes of this project, a different configuration was applied:
 
 * Rotation up to 40 degrees (to consider just standard hand positions)
 * Shifting up to 10% (not too much shifting to prevent the hands to be cropped)
@@ -152,7 +152,7 @@ Data Augmentation it is a common technique to better exploit the available datas
 
 The following figure shows the samples generated from a single image:
 
-![Augmentation examples](https://s3-us-west-2.amazonaws.com/mtcapps/mlcapstone/images/report/augmented_k_5.png)
+![Augmentation examples](images/augmented_k_5.png)
 
 ### Benchmark
 
@@ -174,7 +174,7 @@ When in operation, to classify images, the proposed method need all images to be
 
 #### Training/Testing
 
-For training and testing, the following pre-processing steps were applied to Training, Evaluation and Testing datasets:
+For training and testing, the following pre-processing steps were applied to Training and Evaluation datasets (Testing dataset images are rescaled but not augmented):
 
 1. Make augmentation. The datasets were augmented off-line by a factor of k (different values of k were used). This means that for each image, k new images were generated applying random transformations. The transformations parameters were described in *Data Augmentation*. The resulting images were scaled to 224x224
 2. Apply the Operation Pre-Process to all images
@@ -185,11 +185,17 @@ The final implementation was made on Keras, using TensorFlow backend. The Keras 
 
 #### Data Partition
 
-Before pre-process, data was divided into training, validation and testing subsets. The validation subset was made with all the images taken from one of the subjects from the *Specially Made* dataset. The testing subset was created from all the images of another subject from the same dataset. This partition enabled us to measure how the classifier generalizes with new subjects.
+Before pre-process, data was divided into training, validation and testing subsets. The validation subset was made with all the images taken from two of the subjects from the *Specially Made* dataset. The testing subset was created from all the images of another two subjects from the same dataset. This partition enabled us to measure how the classifier generalizes with new subjects.
 
-The first experiments consisted in training using only the specially made dataset, augmented using a factor of k = 10. Thus, the dataset had a total of 630 original images, augmented to 6300. The training subset consisted of 450 (71%) original images, augmented to 4500. Test and validation subsets had 90 (14%) original images each (900 augmented). There were poor results with this data configuration. There was a quick tendency of increasing the validation error during training.  Also, the number of trainable weights (6147) was high in comparison with the number of training examples.
+The first experiments consisted in training using only the specially made dataset, augmented using a factor of k = 10. Thus, the dataset had a total of 630 original images (dataset was smaller than now), augmented to 6300. The training subset consisted of 450 (71%) original images, augmented to 4500. Test and validation subsets had 90 (14%) original images each and the Validation test was resized to 900 images with the augmentation. There were poor results with this data configuration. There was a quick tendency of increasing the validation error during training.  Also, the number of trainable weights (6147) was high in comparison with the number of training examples. More samples were needed.
 
-The next experiments added the SenseZ3D dataset and changed the augmentation factor to k = 5 (*see Refinement*). This new dataset configuration had a total of 990 original images, augmented to 4950. The training subset consisted of 810 (82%) original images, augmented to 4500. Test and validation subsets had 90 (9%) original images each (900 augmented). This configuration doubled the number of original training images and improved the classifier's performance. However in this case, the number of testing and validation images is below the usual standards. It was made this way because of the lack of data available for training. The usual costs of using small testing/validation subsets are the uncertainty of the generalization measure (we can't be so certain about our measured generalization power) and the high deviation of results from the same model architecture (same training experiments with different initializations may deliver different results). Nevertheless, as new subjects were used on the validation/test subsets, generalization measure could be good enough for our purposes (note that the need of using more data is one of the main conclusions of this project).
+The next experiments increased the number of samples of the *Specially Made* dataset and also added the SenseZ3D dataset. The augmentation factor was changed to k = 5 (*see Refinement*). This new dataset configuration had a total of 1698 original images and the following distribution:
+
+* Training samples: 1338 (78%)
+* Validation samples: 180 (10%)
+* Testing samples: 180 (10%)
+
+ Augmentation increased the number of samples to 6690 in the training set and 900 in validation subset. This configuration doubled the number of original training images and improved the classifier's performance. However in this case, the number of testing and validation images is below the usual standards. It was made this way because of the lack of data available for training. The usual costs of using small testing/validation subsets are the uncertainty of the generalization measure (we can't be so certain about our measured generalization power) and the high deviation of results from the same model architecture (same training experiments with different initializations may deliver different results). Nevertheless, as new subjects were used on the validation/test subsets, generalization measure could be good enough for our purposes (note that the need of using more data is one of the main conclusions of this project).
 
 #### Training
 
@@ -199,7 +205,7 @@ RMSProp was used to train the proposed model.The best results were obtained with
 
 Training was made considering a batch size of 400 and 200 epochs. The training curves are shown in the following figures:
 
-![training curves](https://s3-us-west-2.amazonaws.com/mtcapps/mlcapstone/images/report/training_curves.png)
+![training curves](images/training_curves.png)
 
 #### Testing
 
@@ -235,7 +241,7 @@ As announced before, there is also high variance in the result just by changing 
 
 The model from test number 1 (closest to the mean) was used to generate the following non-normalized confusion matrix:
 
-![Confusion matrix](https://s3-us-west-2.amazonaws.com/mtcapps/mlcapstone/images/report/confusion_matrix.png)
+![Confusion matrix](images/confusion_matrix.png)
 
 The confusion matrix shows that the proposed classifier performs better on Rock and Paper images than Scissors. The images of this last category are often misclassified.
 
@@ -256,7 +262,7 @@ The obtained score doesn't reach the benchmarking threshold and neither seems to
 
 Some results over random images from the testing subject are displayed below:
 
-![Some predictions over testing subset](https://s3-us-west-2.amazonaws.com/mtcapps/mlcapstone/images/report/testing_images.jpg)
+![Some predictions over testing subset](images/testing_images.jpg)
 
 The above figure shows the proposed classifier in action. There's still work to do to improve scissors classification.
 
