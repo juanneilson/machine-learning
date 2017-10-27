@@ -21,31 +21,44 @@ Several papers have shown that convolutional neural networks can deliver outstan
 
 Transfer learning is a term that refers to the techniques that can be used to take advantage of the knowledge gained while solving one problem and applying it to a different but related problem [9]. In deep neural networks, this can be done by fixing specific weights of the network from a previously trained model and retraining the remaining ones using new samples related to the new problem.
 
-In this project I created an appearance-based classifier of the three rock-paper-scissors game hand gestures. The algorithm was trained by applying *Transfer learning* to a state-of-the-art object recognition CNN model. The SenseZ3D static hand gesture dataset [4, 5] combined with a new set images (specially created for this project) were used for training and evaluation.
+In this project I created two appearance-based classifiers of the three rock-paper-scissors game hand gestures. One algorithm was trained by applying *Transfer learning* to a state-of-the-art object recognition CNN model. The other used a very simple CNN architecture fully constructed from scratch. The SenseZ3D static hand gesture dataset [4, 5] combined with a new set images (specially created for this project) were used for training and evaluation.
 
 ### Problem Statement
 
 The main objective of this work is to create an image classifier capable of detecting the three different hand gestures from the rock-paper-scissors game. This classifier should allow a human user to play this game with a computer using just a screen and a webcam as an interface.
 
-The proposed solution obtains a classifier by applying *Transfer Learning* to ResNet50 [7] convolutional neural network. A new rock-paper-scissors dataset (based on SenseZ3D [3, 4] combined with new images) is created and used to adapt the weights of a fully connected layer that takes its inputs from ResNet50 pre-classification outputs. The resulting algorithm is evaluated as a classification task where the input are the images of people showing hand gestures from rock-paper-scissors game. The accuracy measure it was used to evaluate performance over the three different classes of the rock-paper-scissors game.
+The first of the proposed solutions obtains a classifier by applying *Transfer Learning* to ResNet50 [7] convolutional neural network. A new rock-paper-scissors dataset (based on SenseZ3D [3, 4] and combined with new images) was created and used to adapt the weights of a fully connected layer that takes its inputs from ResNet50 pre-classification outputs. The second proposed solution was obtained by designing a very simple CNN architecture that was trained from scratch. This architecture takes the inputs from the same dataset, but uses the preprocessed images directly instead of using the ResNet50 features.
+
+The resulting algorithms were evaluated as classification tasks where the input are the images of people showing hand gestures from rock-paper-scissors game. The accuracy measure it was used to evaluate performance over the three different classes of the rock-paper-scissors game.
 
 ### Metrics
 
-The proposed evaluation metric is the classification accuracy over the test dataset. This measure is appropriate to the task because the classes have equal priority and the accuracy score shows overall classification performance.
+The proposed evaluation metric is the classification accuracy over the test dataset. This measure is appropriate to the task because the classes have equal priority and the accuracy score shows overall classification performance. The accuracy score (A) is a function of the number of successfully classified samples (*k*) and the total number of samples in the dataset (*N*):
+
+\begin{equation}
+A = 100\frac{k}{N}
+\end{equation}
+
 
 
 ## II. Analysis
 
 ### Data Exploration
 
-The proposed classifier receives a webcam color image as input. The algorithm should work well on different light, postures and background conditions, so the training and testing datasets should reflect this noisy environments. For this purpose there's the need of using a lot of samples from different sources. The selected databases are:
+Image hand gesture recognition is a very difficult task because the algorithms should deal with many problems:
 
-* A subset of the SenseZ3D static hand gesture dataset [4, 5], which contains 30 images of different hand gestures from each of 4 subjects in webcam similar situations. The proposed subset contains just the gestures of Rock-Paper-Scissors (G1, G2 and G5)
-* A specially made dataset with the webcam images of 12 subjects. This dataset contains 30 images of each gesture for each subject
+* **Illumination variation:** Different illumination conditions generates different images
+* **Point of view variation:** Different points of view for the same hand gesture generates different images
+* **Posture variation** There are a large number of postures that the same hand can use to represent a single gesture.
+
+The algorithm should work well on different conditions, so the training and testing datasets should reflect this noisy environments. For this purpose there's the need of using a lot of samples from different sources. The selected databases are:
+
+* A subset of the **SenseZ3D** static hand gesture dataset [4, 5], which contains 30 images of different hand gestures from each of 4 subjects in webcam similar situations. The proposed subset contains just the gestures of Rock-Paper-Scissors (G1, G2 and G5)
+* A **specially made** dataset with the webcam images. Originally this dataset had a very similar structure to the **SenseZ3D** but it was necessary to
 
 The following table shows some samples from this datasets
 
-![dataset samples](https://s3-us-west-2.amazonaws.com/mtcapps/mlcapstone/images/report/dataset_examples_table.png)
+![dataset samples](images/dataset_examples_table.png)
 
 Thus, considering both datasets, there were:
 
@@ -66,13 +79,13 @@ Considering all datasets, our final set of images has:
 
 As mentioned before, the intended rock-paper-scissors classifier for the web should work well on a broad range of situations. However, the SenseZ3D dataset doesn't show too much variation in background, pose and illumination conditions of the images. The next figure shows this problem in the 30 images of subject 1 for gesture 1 (paper):
 
-![sensez3d paper images](https://s3-us-west-2.amazonaws.com/mtcapps/mlcapstone/images/report/sensez3d_s1_g1.png)
+![sensez3d paper images](images/sensez3d_s1_g1.png)
 
 #### Specially Made Dataset
 
 This dataset was created to provide the algorithm the possibility to learn from a wide range of conditions. There were used three different locations when capturing each gesture subset. The next figure shows the variations in pose, background and illumination for the paper images of one subject
 
-![RPS dataset paper images](https://s3-us-west-2.amazonaws.com/mtcapps/mlcapstone/images/report/special_s1_paper.png)
+![RPS dataset paper images](images/special_s1_paper.png)
 
 From the images above we may observe the following:
 
