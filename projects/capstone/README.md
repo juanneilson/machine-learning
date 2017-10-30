@@ -15,12 +15,13 @@ Please refer to the link above to set the correct environment to run this code.
 
 All project coding is written on the files:
 
-* Cachipun.ipynb
-* mmtc_misc_tools.py
+* **Cachipun_transfer_learning.ipynb**   (this file contains code for the M1 approach described in the report)
+* **Cachipun.ipynb** (this file contains code for the M2 approach described in the report)
+* **mmtc_misc_tools.py**
 
 The dataset used in this project can be downloaded from the following link (temporarily):
 
-https://s3-us-west-2.amazonaws.com/mtcapps/mlcapstone/datasets.zip
+https://s3-us-west-2.amazonaws.com/mtcapps/mlcapstone/easy.zip
 
 For now, this dataset is only intended to be used for this project and its evaluation. Please write me if you want to use it with other purposes.
 
